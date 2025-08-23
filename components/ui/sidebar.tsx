@@ -91,11 +91,11 @@ const navigationData: NavigationData = {
                   href: "/dashboard/business-management/loan-payment/repayment",
                   icon: Receipt,
                 },
-                // {
-                //   name: "Repayment Schedule",
-                //   href: "/dashboard/business-management/loan-payment/repayment-schedule",
-                //   icon: Clipboard,
-                // },
+                {
+                  name: "Repayment Schedule",
+                  href: "/dashboard/business-management/loan-payment/repayment-schedules",
+                  icon: Clipboard,
+                },
               ],
             },
             // {
@@ -231,18 +231,17 @@ export function Sidebar({
             aria-controls={`${item.name}-children`}
           >
             <IconComponent className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed ||
-              (isMobile && (
-                <>
-                  <span className="flex-1 truncate">{item.name}</span>
-                  <ChevronRight
-                    className={cn(
-                      "w-4 h-4 transition-transform flex-shrink-0",
-                      expanded ? "rotate-90" : ""
-                    )}
-                  />
-                </>
-              ))}
+            {(!isCollapsed || isMobile) && (
+              <span className="flex-1 truncate">{item.name}</span>
+            )}
+            {(!isCollapsed || isMobile) && (
+              <ChevronRight
+                className={cn(
+                  "w-4 h-4 transition-transform flex-shrink-0",
+                  expanded ? "rotate-90" : ""
+                )}
+              />
+            )}
           </button>
 
           {expanded && (!isCollapsed || isMobile) && (
