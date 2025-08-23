@@ -31,6 +31,7 @@ import {
   Clipboard,
   Receipt,
   CreditCard,
+  TrendingUp,
 } from "lucide-react";
 
 const navigationData: NavigationData = {
@@ -98,11 +99,23 @@ const navigationData: NavigationData = {
                 },
               ],
             },
-            // {
-            //   name: "Finance",
-            //   href: "/dashboard/business-management/finance",
-            //   icon: TrendingUp,
-            // },
+            {
+              name: "Finance",
+              href: "/dashboard/business-management/finance",
+              icon: TrendingUp,
+              children: [
+                {
+                  name: "Account",
+                  href: "/dashboard/business-management/finance/account",
+                  icon: User,
+                },
+                {
+                  name: "Transactions",
+                  href: "/dashboard/business-management/finance/transactions",
+                  icon: Receipt,
+                },
+              ],
+            },
             // {
             //   name: "Expense",
             //   href: "/dashboard/business-management/expense",
