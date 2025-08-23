@@ -33,6 +33,10 @@ import {
   CreditCard,
   TrendingUp,
   FileText,
+  Settings,
+  FileType,
+  Folder,
+  Mail,
 } from "lucide-react";
 
 const navigationData: NavigationData = {
@@ -136,50 +140,66 @@ const navigationData: NavigationData = {
         },
       ],
     },
-    // {
-    //   title: "System Configuration",
-    //   items: [
-    //     {
-    //       name: "System Configuration",
-    //       href: "/dashboard/system-configuration",
-    //       icon: Settings,
-    //       children: [
-    //         {
-    //           name: "Branch",
-    //           href: "/dashboard/system-configuration/branch",
-    //           icon: Building2,
-    //         },
-    //         {
-    //           name: "Loan Type",
-    //           href: "/dashboard/system-configuration/loan-type",
-    //           icon: FileType,
-    //         },
-    //         {
-    //           name: "Document Type",
-    //           href: "/dashboard/system-configuration/document-type",
-    //           icon: Folder,
-    //         },
-    //         {
-    //           name: "Account Type",
-    //           href: "/dashboard/system-configuration/account-type",
-    //           icon: User,
-    //         },
-    //         {
-    //           name: "Email Notification",
-    //           href: "/dashboard/system-configuration/email-notification",
-    //           icon: Mail,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "System Settings",
-    //   items: [
-    //     { name: "Pricing", href: "/dashboard/pricing", icon: DollarSign },
-    //     { name: "Settings", href: "/dashboard/settings", icon: Settings },
-    //   ],
-    // },
+    {
+      title: "System Configuration",
+      items: [
+        {
+          name: "System Configuration",
+          href: "/dashboard/system-configuration",
+          icon: Settings,
+          children: [
+            {
+              name: "Branch",
+              href: "/dashboard/system-configuration/branch",
+              icon: Building2,
+            },
+            {
+              name: "Loan Type",
+              href: "/dashboard/system-configuration/loan-type",
+              icon: FileType,
+            },
+            {
+              name: "Document Type",
+              href: "/dashboard/system-configuration/document-type",
+              icon: Folder,
+            },
+            {
+              name: "Account Type",
+              href: "/dashboard/system-configuration/account-type",
+              icon: User,
+            },
+            {
+              name: "Email Notification",
+              href: "/dashboard/system-configuration/email-notification",
+              icon: Mail,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: "System Settings",
+      items: [
+        {
+          name: "Pricing",
+          href: "/dashboard/pricing",
+          icon: DollarSign,
+          children: [
+            {
+              name: "Packages",
+              href: "/dashboard/pricing/packages",
+              icon: CreditCard,
+            },
+            {
+              name: "Transactions",
+              href: "/dashboard/pricing/transactions",
+              icon: Receipt,
+            },
+          ],
+        },
+        // { name: "Settings", href: "/dashboard/settings", icon: Settings },
+      ],
+    },
   ],
 };
 
