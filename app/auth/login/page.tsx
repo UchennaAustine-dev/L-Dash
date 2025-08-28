@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const router = useRouter();
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -54,7 +56,7 @@ export default function LoginPage() {
       toast.success("Login successful! Redirecting to dashboard...");
 
       // Redirect to dashboard
-      // router.push('/dashboard')
+      router.push("/dashboard");
     } catch (error) {
       toast.error("Invalid credentials. Please try again.");
     } finally {

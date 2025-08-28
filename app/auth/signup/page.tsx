@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
+  const router = useRouter();
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -75,7 +76,7 @@ export default function SignUpPage() {
       );
 
       // Redirect to login or dashboard
-      // router.push('/auth/login')
+      router.push("/auth/login");
     } catch (error) {
       toast.error("Failed to create account. Please try again.");
     } finally {
