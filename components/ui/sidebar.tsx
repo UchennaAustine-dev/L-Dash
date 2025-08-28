@@ -78,6 +78,11 @@ const navigationData: NavigationData = {
           icon: Building2,
           children: [
             {
+              name: "Branch",
+              href: "/dashboard/business-management/branch",
+              icon: Building2,
+            },
+            {
               name: "Customer",
               href: "/dashboard/business-management/customer",
               icon: User,
@@ -104,23 +109,23 @@ const navigationData: NavigationData = {
                 },
               ],
             },
-            {
-              name: "Finance",
-              href: "/dashboard/business-management/finance",
-              icon: TrendingUp,
-              children: [
-                {
-                  name: "Account",
-                  href: "/dashboard/business-management/finance/account",
-                  icon: User,
-                },
-                {
-                  name: "Transactions",
-                  href: "/dashboard/business-management/finance/transactions",
-                  icon: Receipt,
-                },
-              ],
-            },
+            // {
+            //   name: "Finance",
+            //   href: "/dashboard/business-management/finance",
+            //   icon: TrendingUp,
+            //   children: [
+            //     {
+            //       name: "Account",
+            //       href: "/dashboard/business-management/finance/account",
+            //       icon: User,
+            //     },
+            //     {
+            //       name: "Transactions",
+            //       href: "/dashboard/business-management/finance/transactions",
+            //       icon: Receipt,
+            //     },
+            //   ],
+            // },
             {
               name: "Expense",
               href: "/dashboard/business-management/expense",
@@ -149,11 +154,6 @@ const navigationData: NavigationData = {
           icon: Settings,
           children: [
             {
-              name: "Branch",
-              href: "/dashboard/system-configuration/branch",
-              icon: Building2,
-            },
-            {
               name: "Loan Type",
               href: "/dashboard/system-configuration/loan-type",
               icon: FileType,
@@ -177,29 +177,29 @@ const navigationData: NavigationData = {
         },
       ],
     },
-    {
-      title: "System Settings",
-      items: [
-        {
-          name: "Pricing",
-          href: "/dashboard/pricing",
-          icon: DollarSign,
-          children: [
-            {
-              name: "Packages",
-              href: "/dashboard/pricing/packages",
-              icon: CreditCard,
-            },
-            {
-              name: "Transactions",
-              href: "/dashboard/pricing/transactions",
-              icon: Receipt,
-            },
-          ],
-        },
-        // { name: "Settings", href: "/dashboard/settings", icon: Settings },
-      ],
-    },
+    // {
+    //   title: "System Settings",
+    //   items: [
+    //     {
+    //       name: "Pricing",
+    //       href: "/dashboard/pricing",
+    //       icon: DollarSign,
+    //       children: [
+    //         {
+    //           name: "Packages",
+    //           href: "/dashboard/pricing/packages",
+    //           icon: CreditCard,
+    //         },
+    //         {
+    //           name: "Transactions",
+    //           href: "/dashboard/pricing/transactions",
+    //           icon: Receipt,
+    //         },
+    //       ],
+    //     },
+    //     // { name: "Settings", href: "/dashboard/settings", icon: Settings },
+    //   ],
+    // },
   ],
 };
 
