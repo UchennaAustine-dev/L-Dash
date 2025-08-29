@@ -21,7 +21,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import {
-  Edit,
   FileSpreadsheet,
   FileText,
   Copy,
@@ -35,7 +34,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
 
 // Mock loan data
 const loanData = {

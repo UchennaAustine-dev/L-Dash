@@ -60,11 +60,11 @@ const navigationData: NavigationData = {
               href: "/dashboard/staff-management/roles",
               icon: Key,
             },
-            {
-              name: "Logged History",
-              href: "/dashboard/staff-management/logged-history",
-              icon: History,
-            },
+            // {
+            //   name: "Logged History",
+            //   href: "/dashboard/staff-management/logged-history",
+            //   icon: History,
+            // },
           ],
         },
       ],

@@ -1,18 +1,30 @@
 export interface Repayment {
   id: number;
-  loan: string;
-  paymentDate: string;
+  loanNumber: string;
+  loanIssuedDate: string;
+  loanDeadline: string;
+  repaymentDate: string;
   principalAmount: number;
-  interest: number;
-  penalty: number;
+  processingFee: number;
+  amountLeftToPay: number;
   totalAmount: number;
+  penaltyFee: number;
+  dueToday: number;
+  status:
+    | "processing"
+    | "approved"
+    | "under repayment"
+    | "overdue"
+    | "fully paid";
+  loanType: "short-term" | "medium-term" | "long-term";
+  amountPaidAlready: number;
 }
 
 export interface RepaymentFormData {
-  loan: string;
-  paymentDate: string;
+  loanNumber: string;
+  loanIssuedDate: string;
+  repaymentDate: string;
   principalAmount: string;
-  interest: string;
-  penalty: string;
-  totalAmount: string;
+  processingFee: string;
+  loanType: "short-term" | "medium-term" | "long-term";
 }

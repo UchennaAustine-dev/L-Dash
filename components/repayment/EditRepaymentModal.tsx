@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,10 +18,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Repayment, RepaymentFormData } from "@/types/repayment";
+import type { Repayment, RepaymentFormData } from "@/types/repayment";
 
 interface EditRepaymentModalProps {
-  loans: string[];
   repayment: Repayment | null;
   isOpen: boolean;
   onClose: () => void;
@@ -28,64 +28,97 @@ interface EditRepaymentModalProps {
 }
 
 export const EditRepaymentModal: React.FC<EditRepaymentModalProps> = ({
-  loans,
   repayment,
   isOpen,
   onClose,
   onUpdateRepayment,
 }) => {
   const [formData, setFormData] = useState<RepaymentFormData>({
-    loan: "",
-    paymentDate: "",
+    loanNumber: "",
+    loanIssuedDate: "",
+    repaymentDate: "",
     principalAmount: "",
-    interest: "",
-    penalty: "",
-    totalAmount: "",
+    processingFee: "",
+    loanType: "short-term",
   });
 
   // Set form data when repayment changes
   useEffect(() => {
     if (repayment) {
       setFormData({
-        loan: repayment.loan,
-        paymentDate: repayment.paymentDate,
+        loanNumber: repayment.loanNumber,
+        loanIssuedDate: repayment.loanIssuedDate,
+        repaymentDate: repayment.repaymentDate,
         principalAmount: repayment.principalAmount.toString(),
-        interest: repayment.interest.toString(),
-        penalty: repayment.penalty.toString(),
-        totalAmount: repayment.totalAmount.toString(),
+        processingFee: repayment.processingFee.toString(),
+        loanType: repayment.loanType,
       });
     }
   }, [repayment]);
 
-  // Calculate total amount when other fields change
-  useEffect(() => {
-    const principal = parseFloat(formData.principalAmount) || 0;
-    const interest = parseFloat(formData.interest) || 0;
-    const penalty = parseFloat(formData.penalty) || 0;
-    const total = principal + interest + penalty;
+  const calculateLoanDeadline = (
+    issuedDate: string,
+    loanType: string
+  ): string => {
+    if (!issuedDate) return "";
+    const issued = new Date(issuedDate);
+    let daysToAdd = 30;
 
-    if (total > 0) {
-      setFormData((prev) => ({ ...prev, totalAmount: total.toFixed(2) }));
+    switch (loanType) {
+      case "short-term":
+        daysToAdd = 30;
+        break;
+      case "medium-term":
+        daysToAdd = 90;
+        break;
+      case "long-term":
+        daysToAdd = 365;
+        break;
     }
-  }, [formData.principalAmount, formData.interest, formData.penalty]);
+
+    const deadline = new Date(issued);
+    deadline.setDate(deadline.getDate() + daysToAdd);
+    return deadline.toISOString().split("T")[0];
+  };
 
   const handleUpdate = (): void => {
     if (
       !repayment ||
-      !formData.loan ||
-      !formData.paymentDate ||
+      !formData.loanNumber ||
+      !formData.loanIssuedDate ||
       !formData.principalAmount
     )
       return;
 
+    const principal = Number.parseFloat(formData.principalAmount);
+    const processing = Number.parseFloat(formData.processingFee) || 0;
+    const loanDeadline = calculateLoanDeadline(
+      formData.loanIssuedDate,
+      formData.loanType
+    );
+
+    const totalDays =
+      formData.loanType === "short-term"
+        ? 30
+        : formData.loanType === "medium-term"
+        ? 90
+        : 365;
+    const dueToday = (principal + processing) / totalDays;
+    const newAmountLeftToPay =
+      principal + processing - repayment.amountPaidAlready;
+
     const updatedRepayment: Repayment = {
       ...repayment,
-      loan: formData.loan,
-      paymentDate: formData.paymentDate,
-      principalAmount: parseFloat(formData.principalAmount),
-      interest: parseFloat(formData.interest) || 0,
-      penalty: parseFloat(formData.penalty) || 0,
-      totalAmount: parseFloat(formData.totalAmount),
+      loanNumber: formData.loanNumber,
+      loanIssuedDate: formData.loanIssuedDate,
+      loanDeadline,
+      repaymentDate: formData.repaymentDate,
+      principalAmount: principal,
+      processingFee: processing,
+      totalAmount: principal + processing + repayment.penaltyFee,
+      amountLeftToPay: newAmountLeftToPay,
+      dueToday: Math.round(dueToday * 100) / 100,
+      loanType: formData.loanType as "short-term" | "medium-term" | "long-term",
     };
 
     onUpdateRepayment(updatedRepayment);
@@ -98,47 +131,73 @@ export const EditRepaymentModal: React.FC<EditRepaymentModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit repayment</DialogTitle>
+          <DialogTitle>Edit Loan</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="edit-loan">Loan</Label>
+            <Label htmlFor="edit-loanNumber">Loan Number</Label>
+            <Input
+              id="edit-loanNumber"
+              value={formData.loanNumber}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFormData((prev) => ({ ...prev, loanNumber: e.target.value }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-loanType">Loan Type</Label>
             <Select
-              value={formData.loan}
+              value={formData.loanType}
               onValueChange={(value: string) =>
-                setFormData((prev) => ({ ...prev, loan: value }))
+                setFormData((prev) => ({ ...prev, loanType: value as any }))
               }
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {loans.map((loan) => (
-                  <SelectItem key={loan} value={loan}>
-                    {loan}
-                  </SelectItem>
-                ))}
+                <SelectItem value="short-term">Short-term (30 days)</SelectItem>
+                <SelectItem value="medium-term">
+                  Medium-term (90 days)
+                </SelectItem>
+                <SelectItem value="long-term">Long-term (365 days)</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-paymentDate">Payment Date</Label>
+            <Label htmlFor="edit-loanIssuedDate">Loan Issued Date</Label>
             <Input
-              id="edit-paymentDate"
+              id="edit-loanIssuedDate"
               type="date"
-              value={formData.paymentDate}
+              value={formData.loanIssuedDate}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData((prev) => ({
                   ...prev,
-                  paymentDate: e.target.value,
+                  loanIssuedDate: e.target.value,
                 }))
               }
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-principalAmount">Principal Amount</Label>
+            <Label htmlFor="edit-repaymentDate">Repayment Date</Label>
+            <Input
+              id="edit-repaymentDate"
+              type="date"
+              value={formData.repaymentDate}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  repaymentDate: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-principalAmount">Principal Amount (₦)</Label>
             <Input
               id="edit-principalAmount"
               type="number"
@@ -153,37 +212,17 @@ export const EditRepaymentModal: React.FC<EditRepaymentModalProps> = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-interest">Interest</Label>
+            <Label htmlFor="edit-processingFee">Processing Fee (₦)</Label>
             <Input
-              id="edit-interest"
+              id="edit-processingFee"
               type="number"
-              value={formData.interest}
+              value={formData.processingFee}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFormData((prev) => ({ ...prev, interest: e.target.value }))
+                setFormData((prev) => ({
+                  ...prev,
+                  processingFee: e.target.value,
+                }))
               }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="edit-penalty">Penalty</Label>
-            <Input
-              id="edit-penalty"
-              type="number"
-              value={formData.penalty}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFormData((prev) => ({ ...prev, penalty: e.target.value }))
-              }
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="edit-totalAmount">Total Amount</Label>
-            <Input
-              id="edit-totalAmount"
-              type="number"
-              value={formData.totalAmount}
-              readOnly
-              className="bg-gray-50"
             />
           </div>
 
@@ -192,7 +231,7 @@ export const EditRepaymentModal: React.FC<EditRepaymentModalProps> = ({
               onClick={handleUpdate}
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              Update
+              Update Loan
             </Button>
           </div>
         </div>
